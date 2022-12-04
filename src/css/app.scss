@@ -1,0 +1,31 @@
+// app global css in SCSS form
+@import '_variables.scss';
+
+body {
+  font-family: $body-font-family;
+  color: $body-font-color;
+  background-color: $body-bg;
+  border-color: #ebe9f1;
+  font-size: 0.85rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $headings-font-family;
+  color: $headings-color;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.8rem;
+}
+
+h6 {
+  font-size: 1.15rem;
+}
