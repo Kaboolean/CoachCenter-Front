@@ -10,6 +10,27 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/users',
         component: () => import('src/pages/users/UsersPage.vue'),
+        children: [
+          {
+            name: 'user-details',
+            path: ':userId',
+            component: () => import('src/pages/users/UserDetails.vue'),
+            props: true,
+          },
+        ],
+      },
+      {
+        path: '/account',
+        component: () => import('src/pages/account/UserAccount.vue'),
+      },
+      //auth
+      {
+        path: '/login',
+        component: () => import('src/pages/auth/LoginPage.vue'),
+      },
+      {
+        path: '/register',
+        component: () => import('src/pages/auth/RegisterPage.vue'),
       },
     ],
   },

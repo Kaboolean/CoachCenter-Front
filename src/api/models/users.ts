@@ -22,3 +22,12 @@ export interface GetUserModel {
   lastName: string | null;
   birthDate: string;
 }
+
+export interface CreateUserModel {
+  userName: string;
+  email: string;
+  // firstName: string | null;
+  // lastName: string | null;
+  // Birthdate: string;
+  password: string;
+}

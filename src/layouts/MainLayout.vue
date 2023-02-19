@@ -1,5 +1,27 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+    <q-header elevated>
+      <q-toolbar>
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        />
+
+        <q-toolbar-title> Coach Center </q-toolbar-title>
+
+        <div>
+          <q-btn to="/register">Register</q-btn>
+        </div>
+        <div>
+          <q-btn to="/login">Login</q-btn>
+        </div>
+      </q-toolbar>
+    </q-header>
+
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
@@ -48,16 +70,22 @@ const miniPersistent = ref(false);
 
 const menuLinks = ref([
   {
-    title: 'Tableau de bord',
+    title: 'Dashboard',
     name: 'dashboard',
     icon: 'home',
     link: '/dashboard',
   },
   {
-    title: 'Utilisateurs',
+    title: 'Users',
     name: 'users',
-    icon: 'group_add',
+    icon: 'group',
     link: '/users',
+  },
+  {
+    title: 'My account',
+    name: 'Account',
+    icon: 'settings',
+    link: '/account',
   },
 ]);
 
@@ -72,6 +100,10 @@ const onMouseOut = () => {
     miniState.value = true;
   }
 };
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
 </script>
 
 <style lang="scss" scoped>
