@@ -1,6 +1,12 @@
 <template>
   <div class="q-pa-md" style="max-width: 400px">
     <h2 style="text-align: center">Register</h2>
+    <h6
+      v-if="errorMessageForm"
+      style="color: #d90007; max-width: 222px; font-size: small"
+    >
+      {{ errorMessageForm }}
+    </h6>
     <q-form @submit="onSubmit" class="q-gutter-md" style="padding: none">
       <q-input
         filled
@@ -85,8 +91,8 @@
           color="white"
           text-color="primary"
           :options="[
-            { label: 'a Coach', value: 'coaches' },
-            { label: 'a Client', value: 'clients' },
+            { label: 'a Coach', value: 'coach' },
+            { label: 'a Client', value: 'client' },
           ]"
         />
       </div>
@@ -103,7 +109,6 @@
         />
       </div>
     </q-form>
-    <h6 v-if="errorMessage" style="color: #d90007">{{ errorMessage }}</h6>
     <div>
       <loading-spinner v-if="isLoading"></loading-spinner>
     </div>
@@ -111,19 +116,17 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
+import { ref, computed, watch } from 'vue';
 
 export default {
+  props: ['errorMessage'],
   emits: ['userSubmitted'],
-  setup(_, context) {
-    const store = useStore();
-
+  setup(props, context) {
     //User experience
     const isPwd = ref(true);
     const isPwd2 = ref(true);
     const isLoading = ref(false);
-    const errorMessage = ref('');
+    const errorMessageForm = ref('');
     function resetForm() {
       userEmailInput.value = '';
       passwordInput.value = '';
@@ -150,7 +153,7 @@ export default {
 
     function onSubmit() {
       //reset des checks
-      errorMessage.value = null;
+      //errorMessage.value = null;
       userTypeCheck.value = true;
       formIsValid.value = true;
       isLoading.value = true;
@@ -163,7 +166,6 @@ export default {
       }
 
       if (formIsValid.value === true) {
-        console.log('test');
         submitUser();
       }
     }
@@ -177,6 +179,15 @@ export default {
       };
       context.emit('userSubmitted', user);
     }
+    watch(
+      () => props.errorMessage,
+      function (newVal) {
+        errorMessageForm.value = newVal;
+        if (newVal) {
+          isLoading.value = false;
+        }
+      }
+    );
     return {
       formIsValid,
       userUserNameInput,
@@ -191,7 +202,7 @@ export default {
       userTypeError,
       resetForm,
       isLoading,
-      errorMessage,
+      errorMessageForm,
     };
   },
 };

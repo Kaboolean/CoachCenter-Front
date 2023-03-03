@@ -4,11 +4,13 @@
     <q-form @submit="onSubmit" class="q-gutter-md" autofocus>
       <q-input
         filled
-        type="email"
-        v-model="userEmailInput"
-        label="Email"
+        type="text"
+        v-model="userNameInput"
+        label="Username"
         lazy-rules
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[
+          (val) => (val && val.length > 0) || 'Please enter your username',
+        ]"
       />
 
       <q-input
@@ -19,7 +21,7 @@
         maxlength="12"
         lazy-rules
         :rules="[
-          (val) => (val !== null && val !== '') || 'Please enter a password',
+          (val) => (val !== null && val !== '') || 'Please enter your password',
           (val) =>
             val.length >= 6 ||
             'Please enter a password size between 6 and 15 characters',
@@ -37,6 +39,7 @@
       </q-input>
 
       <div>
+        <q-btn label="test" @click="testf" />
         <q-btn
           label="Submit"
           type="submit"
@@ -45,7 +48,9 @@
         />
       </div>
     </q-form>
-    <h6 v-if="errorMessage" style="color: #d90007">{{ errorMessage }}</h6>
+    <h6 v-if="errorMessageForm" style="color: #d90007">
+      {{ errorMessageForm }}
+    </h6>
     <div>
       <loading-spinner v-if="isLoading"></loading-spinner>
     </div>
@@ -54,49 +59,51 @@
 
 <script>
 import { ref, watch } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 
 export default {
-  setup() {
-    const store = useStore();
-    const router = useRouter();
+  props: ['errorMessage'],
+  emits: ['loginSubmitted'],
+  setup(props, context) {
     //User experience
     const isPwd = ref(true);
     const isLoading = ref(false);
-    const errorMessage = ref('');
+    const errorMessageForm = ref('');
 
     //Form control
-    const userEmailInput = ref('');
+    const userNameInput = ref('');
     const passwordInput = ref('');
     const regex = /\d/;
     async function onSubmit() {
-      const userLogin = {
-        email: userEmailInput.value,
-        password: passwordInput.value,
-      };
-      try {
-        await store.dispatch('auth/loginUser', userLogin);
-        isLoading.value = true;
-        router.replace('/');
-      } catch (error) {
-        errorMessage.value = error.message;
-        isLoading.value = false;
-        console.log(error);
-        console.log(error.message);
-      }
+      context.emit('loginSubmitted', {
+        UserName: userNameInput.value,
+        Password: passwordInput.value,
+      });
     }
-    watch(userEmailInput, function () {
-      errorMessage.value = '';
+    watch(userNameInput, function () {
+      errorMessageForm.value = '';
     });
+    watch(
+      () => props.errorMessage,
+      function (newVal) {
+        errorMessageForm.value = newVal;
+        if (newVal) {
+          isLoading.value = false;
+        }
+      }
+    );
+    function testf() {
+      console.log(props.errorMessage);
+      console.log(errorMessageForm.value);
+    }
     return {
-      userEmailInput,
+      userNameInput,
       passwordInput,
       onSubmit,
       regex,
       isPwd,
       isLoading,
-      errorMessage,
+      errorMessageForm,
+      testf,
     };
   },
 };
