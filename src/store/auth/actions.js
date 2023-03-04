@@ -54,30 +54,3 @@ export default {
     });
   },
 };
-
-//   async loginUser(context, payload) {
-//     const userLogin = {
-//       ...payload,
-//       returnSecureToken: true,
-//     };
-//     try {
-//       const response = await axios.post(
-//         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDXUtNBXTge4dAAqv-0VhJePc42Kc1U4cU`,
-//         userLogin
-//       );
-//       localStorage.setItem('token', response.data.idToken);
-//       localStorage.setItem('userId', response.data.localId);
-//       localStorage.setItem('tokenExpiration', expirationDate);
-//       const userToStoreLocal = {
-//         token: response.data.idToken,
-//         userId: response.data.localId,
-//       };
-//       console.log(response);
-//       console.log(response.data);
-//       context.commit('setUser', userToStoreLocal);
-//     } catch (error) {
-//       console.log(error);
-//       throw error;
-//     }
-//   },
-// };
