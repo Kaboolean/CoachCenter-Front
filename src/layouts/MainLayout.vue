@@ -131,24 +131,23 @@ const coachItems = [
 
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
 if (isAuthenticated.value.token) {
-  menuLinks.value.push({
-    title: 'My account',
-    name: 'Account',
-    icon: 'settings',
-    link: '/account',
-  });
+  if (isAuthenticated.value.userType === 'client') {
+    menuLinks.value.push(...clientItems);
+  }
+  if (isAuthenticated.value.userType === 'coach') {
+    menuLinks.value.push(...coachItems);
+  }
 }
 
 watch(isAuthenticated, function (curVal, oldVal) {
   if (curVal.token) {
-    if (curVal.userType === 'coach') {
+    if (curVal.userType === 'client') {
       menuLinks.value.push(...clientItems);
-    } else if (curVal.userType === 'client') {
+    } else if (curVal.userType === 'coach') {
       menuLinks.value.push(...coachItems);
     }
   }
   if (!curVal.token) {
-    console.log('test');
     if (oldVal.userType === 'client') {
       menuLinks.value.splice(2, clientItems.length + 1);
     }
