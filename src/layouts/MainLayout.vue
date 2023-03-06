@@ -67,15 +67,13 @@
 import { ref, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { toRaw } from 'vue';
 import MenuLink from 'src/components/MenuLink.vue';
 //import router from 'src/router';
-
 const leftDrawerOpen = ref(false);
 const miniState = ref(false);
 const miniPersistent = ref(false);
 
-const menuLinks = ref([
+const menuLinksDefault = [
   {
     title: 'Dashboard',
     name: 'dashboard',
@@ -88,26 +86,9 @@ const menuLinks = ref([
     icon: 'group',
     link: '/users',
   },
-]);
-
-const onMouseOver = () => {
-  if (miniPersistent.value) {
-    miniState.value = false;
-  }
-};
-
-const onMouseOut = () => {
-  if (miniPersistent.value) {
-    miniState.value = true;
-  }
-};
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
-
-const store = useStore();
-const router = useRouter();
+];
+const menuLinksDefaultLength = menuLinksDefault.length;
+const menuLinks = ref(menuLinksDefault);
 
 const clientItems = [
   {
@@ -126,9 +107,7 @@ const coachItems = [
   },
 ];
 
-// const menuLinksComputed = computed(() => toRaw(menuLinks.value));
-// console.log(menuLinksComputed.value);
-
+const store = useStore();
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
 if (isAuthenticated.value.token) {
   if (isAuthenticated.value.userType === 'client') {
@@ -149,14 +128,31 @@ watch(isAuthenticated, function (curVal, oldVal) {
   }
   if (!curVal.token) {
     if (oldVal.userType === 'client') {
-      menuLinks.value.splice(2, clientItems.length + 1);
+      menuLinks.value.splice(menuLinksDefaultLength, clientItems.length);
     }
     if (oldVal.userType === 'coach') {
-      menuLinks.value.splice(2, coachItems.length + 1);
+      menuLinks.value.splice(menuLinksDefaultLength, coachItems.length);
     }
   }
 });
 
+const onMouseOver = () => {
+  if (miniPersistent.value) {
+    miniState.value = false;
+  }
+};
+
+const onMouseOut = () => {
+  if (miniPersistent.value) {
+    miniState.value = true;
+  }
+};
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+const router = useRouter();
 async function logout() {
   await store.dispatch('auth/logout');
   router.replace({ path: '/' });
