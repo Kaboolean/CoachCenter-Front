@@ -13,10 +13,10 @@
 
         <q-toolbar-title> Coach Center </q-toolbar-title>
 
-        <div v-if="!isAuthenticated">
+        <div v-if="!isAuthenticated.token">
           <q-btn to="/register">Register</q-btn>
         </div>
-        <div v-if="!isAuthenticated">
+        <div v-if="!isAuthenticated.token">
           <q-btn to="/login">Login</q-btn>
         </div>
         <div v-else>
@@ -64,9 +64,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { toRaw } from 'vue';
 import MenuLink from 'src/components/MenuLink.vue';
 //import router from 'src/router';
 
@@ -86,12 +87,6 @@ const menuLinks = ref([
     name: 'users',
     icon: 'group',
     link: '/users',
-  },
-  {
-    title: 'My account',
-    name: 'Account',
-    icon: 'settings',
-    link: '/account',
   },
 ]);
 
@@ -113,8 +108,54 @@ function toggleLeftDrawer() {
 
 const store = useStore();
 const router = useRouter();
-const isAuthenticated = computed(function () {
-  return store.getters['auth/isAuthenticated'];
+
+const clientItems = [
+  {
+    title: 'My client account',
+    name: 'Account',
+    icon: 'settings',
+    link: '/account',
+  },
+];
+const coachItems = [
+  {
+    title: 'My coach account',
+    name: 'Account',
+    icon: 'settings',
+    link: '/account',
+  },
+];
+
+// const menuLinksComputed = computed(() => toRaw(menuLinks.value));
+// console.log(menuLinksComputed.value);
+
+const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
+if (isAuthenticated.value.token) {
+  menuLinks.value.push({
+    title: 'My account',
+    name: 'Account',
+    icon: 'settings',
+    link: '/account',
+  });
+}
+
+watch(isAuthenticated, function (curVal, oldVal) {
+  if (curVal.token) {
+    if (curVal.userType === 'coach') {
+      menuLinks.value.push(...clientItems);
+    } else if (curVal.userType === 'client') {
+      menuLinks.value.push(...coachItems);
+    }
+  }
+  if (!curVal.token) {
+    console.log('test');
+    if (oldVal.userType === 'client') {
+      menuLinks.value.splice(2, clientItems.length + 1);
+    }
+    if (oldVal.userType === 'coach') {
+      menuLinks.value.splice(2, coachItems.length + 1);
+    }
+  }
 });
 
 async function logout() {

@@ -12,8 +12,15 @@ export default {
   getUserType(state) {
     return state.userType;
   },
+  // isAuthenticated(state) {
+  //   return !!state.token;
+  // },
   isAuthenticated(state) {
-    return !!state.token;
+    const user = {
+      token: !!state.token,
+      userType: state.userType,
+    };
+    return user;
   },
   isAutoLogout(state) {
     return state.didAutoLogout;

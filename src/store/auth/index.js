@@ -6,7 +6,7 @@ export default {
   namespaced: true,
   state() {
     return {
-      tokenId: '',
+      token: '',
       userId: '',
       userType: '',
       didAutoLogout: false,
