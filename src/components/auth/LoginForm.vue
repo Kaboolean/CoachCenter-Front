@@ -39,7 +39,6 @@
       </q-input>
 
       <div>
-        <q-btn label="test" @click="testf" />
         <q-btn
           label="Submit"
           type="submit"
@@ -91,10 +90,6 @@ export default {
         }
       }
     );
-    function testf() {
-      console.log(props.errorMessage);
-      console.log(errorMessageForm.value);
-    }
     return {
       userNameInput,
       passwordInput,
@@ -103,7 +98,6 @@ export default {
       isPwd,
       isLoading,
       errorMessageForm,
-      testf,
     };
   },
 };

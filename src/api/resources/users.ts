@@ -32,20 +32,17 @@ export default class UsersResource {
   }
 
   public async register(CreateUserModel: CreateUserModel) {
-    //essayer de virer le try catch et passer sur du .catch(ex=>{})
     try {
       const result = await http.post(`${resource}`, CreateUserModel);
-      console.log(result);
       return result;
     } catch (err: any) {
-      //console.log(err.response.data);
       throw err;
     }
   }
 
   public async deleteUserById(id: string) {
     try {
-      const result = await http.delete(`${resource}/${id}`);
+      await http.delete(`${resource}/${id}`);
     } catch (err: any) {
       throw err;
     }

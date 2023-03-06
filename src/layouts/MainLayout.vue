@@ -118,7 +118,6 @@ const isAuthenticated = computed(function () {
 });
 
 async function logout() {
-  console.log('test');
   await store.dispatch('auth/logout');
   router.replace({ path: '/' });
 }

@@ -8,6 +8,8 @@ export default {
     return {
       tokenId: '',
       userId: '',
+      userType: '',
+      didAutoLogout: false,
     };
   },
   getters: authGetters,
