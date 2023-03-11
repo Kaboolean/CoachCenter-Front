@@ -25,9 +25,7 @@ export default {
         await store.dispatch('auth/login', LoginModel);
         router.replace('/');
       } catch (error) {
-        console.log(error.response);
         errorMessage.value = error.response.data.message;
-        console.log(errorMessage.value);
       }
     }
     return { submitLogin, errorMessage };

@@ -12,9 +12,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/users/UsersPage.vue'),
         children: [
           {
-            name: 'user-details',
+            name: 'user-create',
+            path: 'create',
+            component: () => import('src/pages/users/CreateUserPage.vue'),
+          },
+          {
+            name: 'user-edit',
             path: ':userId',
-            component: () => import('src/pages/users/UserDetails.vue'),
+            component: () => import('src/pages/users/EditUserPage.vue'),
             props: true,
           },
         ],

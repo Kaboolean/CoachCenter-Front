@@ -4,7 +4,10 @@ import {
   ListUserQueryParameters,
   GetUserModel,
   CreateUserModel,
+  GetUserDetailsModel,
 } from '../models/users';
+import { GetCoachModel, GetCoachModelWithId } from '../models/coaches';
+import { GetClientModel, GetClientModelWithId } from '../models/clients';
 
 const resource = 'users';
 
@@ -25,21 +28,54 @@ export default class UsersResource {
     return result.data;
   }
 
-  public async getById(id: string): Promise<GetUserModel> {
+  public async getUserById(id: string): Promise<GetUserModel> {
     // get http://localhost:5065/users/{id}
     const result = await http.get<GetUserModel>(`${resource}/${id}`);
+
     return result.data;
   }
 
-  public async register(CreateUserModel: CreateUserModel) {
+  public async getCoach(id: string) {
+    const result = await http.get<GetCoachModel>(`coaches/${id}`);
+    console.log(result);
+    return result.data.data;
+  }
+  public async getClient(id: string) {
+    const result = await http.get<GetClientModel>(`clients/${id}`);
+    console.log(result);
+    return result.data.data;
+  }
+
+  public async register(user: CreateUserModel) {
     try {
-      const result = await http.post(`${resource}`, CreateUserModel);
-      return result;
+      const result = await http.post(`${resource}`, user);
+      return result.data.data;
     } catch (err: any) {
       throw err;
     }
   }
 
+  public async updateUser(user: GetUserModel) {
+    try {
+      await http.put(`${resource}`, user);
+    } catch (err: any) {
+      throw err;
+    }
+  }
+  public async updateCoach(coach: GetCoachModelWithId) {
+    try {
+      await http.put('/coaches', coach);
+    } catch (err: any) {
+      throw err;
+    }
+  }
+  public async updateClient(client: GetClientModelWithId) {
+    try {
+      await http.put('/clients', client);
+    } catch (err: any) {
+      throw err;
+    }
+  }
   public async deleteUserById(id: string) {
     try {
       await http.delete(`${resource}/${id}`);

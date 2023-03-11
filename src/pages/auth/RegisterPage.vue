@@ -23,13 +23,10 @@ export default {
 
     async function submitData(user) {
       try {
-        console.log(user);
         await store.dispatch('auth/registerUser', user);
         router.replace('/dashboard');
       } catch (error) {
-        console.log(error.response);
         errorMessage.value = error.response.data.message;
-        console.log(errorMessage.value);
       }
     }
     return {

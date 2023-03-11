@@ -68,10 +68,6 @@ import { ref, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import MenuLink from 'src/components/MenuLink.vue';
-//import router from 'src/router';
-const leftDrawerOpen = ref(false);
-const miniState = ref(false);
-const miniPersistent = ref(false);
 
 const menuLinksDefault = [
   {
@@ -81,7 +77,7 @@ const menuLinksDefault = [
     link: '/dashboard',
   },
   {
-    title: 'Users',
+    title: 'Admin',
     name: 'users',
     icon: 'group',
     link: '/users',
@@ -136,18 +132,19 @@ watch(isAuthenticated, function (curVal, oldVal) {
   }
 });
 
+const leftDrawerOpen = ref(false);
+const miniState = ref(false);
+const miniPersistent = ref(false);
 const onMouseOver = () => {
   if (miniPersistent.value) {
     miniState.value = false;
   }
 };
-
 const onMouseOut = () => {
   if (miniPersistent.value) {
     miniState.value = true;
   }
 };
-
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }

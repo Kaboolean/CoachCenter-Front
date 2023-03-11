@@ -1,8 +1,23 @@
 <template>
   <div class="row">
     <h4>{{ $t('users') }}</h4>
-    <q-btn @click="refresh" style="position: absolute; right: 12.5%"
+    <q-btn
+      icon-right="refresh"
+      @click="refresh"
+      style="position: absolute; right: 12.5%"
       >Refresh List</q-btn
+    >
+    <q-btn
+      v-if="selected.length"
+      @click="deleteUsers()"
+      style="position: absolute; right: 20.5%"
+      >Delete {{ selected.length > 1 ? 'users ' : 'user ' }}</q-btn
+    >
+    <q-btn
+      icon-right="add_circle"
+      @click="createUser"
+      style="position: absolute; right: 5%"
+      >Create user</q-btn
     >
   </div>
 
@@ -13,28 +28,17 @@
         :rows="users"
         :columns="columns"
         row-key="id"
-        selection="single"
+        selection="multiple"
         v-model:selected="selected"
         :loading="isLoading"
+        @row-dblclick="editUser"
       >
-        <!-- props est la donnée du row transmise -->
-        <template v-slot:body-cell-delete="props">
-          <q-tr>
-            <q-td :props="props">
-              <q-btn
-                name="delete"
-                label="delete"
-                icon="delete"
-                @click="deleteUser(props.row.id)"
-              />
-            </q-td>
-          </q-tr>
-        </template>
       </q-table>
     </div>
 
     <!-- <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div> -->
   </div>
+  <!-- User details qtable -->
   <div v-if="selected.length" class="row q-mt-md">
     <div class="col-12">
       <q-table
@@ -46,20 +50,28 @@
       />
     </div>
   </div>
+  <router-view v-slot="{ Component, route }">
+    <transition name="route" mode="out-in">
+      <component
+        :is="Component"
+        :key="route.path"
+        @update="refresh"
+      ></component>
+    </transition>
+  </router-view>
 </template>
 
 <script setup lang="ts">
-import api from 'src/api';
+import api from 'src/api/index';
 import { useQuasar } from 'quasar';
+import { useRouter, useRoute } from 'vue-router';
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue';
 //importation du DTO ListUserModel
 import { ListUserModel } from 'src/api/models/users';
-import { onBeforeMount, ref, watch } from 'vue';
-import { toRaw } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 onBeforeMount(async () => {
   //utilisation de la méthode .list() de la classe UsersResource
   users.value = await api.users.list();
-  console.log(users.value);
 });
 async function refresh() {
   isLoading.value = true;
@@ -70,7 +82,7 @@ const $q = useQuasar();
 
 const isLoading = ref(false);
 const users = ref<ListUserModel[]>([]);
-const selected = ref([]);
+const selected = ref<ListUserModel[]>([]);
 const columns = ref([
   {
     name: 'userName',
@@ -140,15 +152,14 @@ const detailsColumns = ref([
     sortable: false,
   },
 ]);
-
-async function deleteUser(id) {
+async function deleteUsers() {
   $q.dialog({
     component: ConfirmDialog,
 
     // props forwarded to your custom component
     componentProps: {
       title: 'Warning',
-      message: 'You are about to delete this user :',
+      message: 'You are about to delete the selected users',
 
       // ...more..props...
     },
@@ -156,18 +167,71 @@ async function deleteUser(id) {
     .onOk(async () => {
       try {
         //delete
-        await api.users.deleteUserById(id);
+        const promises: Promise<void>[] = [];
+        selected.value.forEach((selection) =>
+          promises.push(api.users.deleteUserById(selection.id))
+        );
+        await Promise.all(promises);
         //refresh
+        selected.value = [];
         users.value = await api.users.list();
       } catch (err) {
         console.log(err);
       }
     })
     .onCancel(() => {
-      console.log('Cancel');
+      //console.log('Cancel');
     })
     .onDismiss(() => {
-      console.log('Called on OK or Cancel');
+      //console.log('Called on OK or Cancel');
     });
 }
+const router = useRouter();
+const route = useRoute();
+function createUser() {
+  router.push('/users/create');
+}
+function editUser(_: Event, row) {
+  console.log(route.params);
+  // if (route.name.userId === row.id) {
+  //   router.push('/users');
+  // }
+  if (route.params.userId === row.id) {
+    router.push('/users');
+  } else {
+    router.push(`/users/${row.id}`);
+  }
+}
 </script>
+
+<style>
+body {
+  max-width: 95%;
+}
+.q-table tbody td:before {
+  background: rgba(0, 131, 105, 0.1);
+}
+.q-table tbody td:after {
+  background: rgba(0, 131, 105, 0.2);
+}
+.route-enter-from {
+  opacity: 0;
+  transform: translateX(50%);
+}
+.route-enter-active {
+  transition: all 0.15s ease-out;
+}
+.route-enter-to {
+  opacity: 1;
+}
+.route-leave-from {
+  opacity: 1;
+}
+.route-leave-active {
+  transition: all 0.15s ease-out;
+}
+.route-leave-to {
+  opacity: 0;
+  transform: translateX(-50%);
+}
+</style>
