@@ -67,7 +67,7 @@
               <div class="col">
                 <q-input
                   filled
-                  type="number"
+                  type="text"
                   v-model="innerValue.handicap"
                   lazy-rules
                   :rules="[

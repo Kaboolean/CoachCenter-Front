@@ -9,7 +9,7 @@
     >
     <q-btn
       v-if="selected.length"
-      @click="deleteUsers()"
+      @click="deleteUsers"
       style="position: absolute; right: 20.5%"
       >Delete {{ selected.length > 1 ? 'users ' : 'user ' }}</q-btn
     >
@@ -68,21 +68,26 @@ import { useRouter, useRoute } from 'vue-router';
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue';
 //importation du DTO ListUserModel
 import { ListUserModel } from 'src/api/models/users';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 onBeforeMount(async () => {
   //utilisation de la méthode .list() de la classe UsersResource
   users.value = await api.users.list();
 });
+
 async function refresh() {
   isLoading.value = true;
   users.value = await api.users.list();
   isLoading.value = false;
 }
+const router = useRouter();
+const route = useRoute();
+
 const $q = useQuasar();
 
 const isLoading = ref(false);
 const users = ref<ListUserModel[]>([]);
 const selected = ref<ListUserModel[]>([]);
+
 const columns = ref([
   {
     name: 'userName',
@@ -152,6 +157,7 @@ const detailsColumns = ref([
     sortable: false,
   },
 ]);
+
 async function deleteUsers() {
   $q.dialog({
     component: ConfirmDialog,
@@ -173,6 +179,13 @@ async function deleteUsers() {
         );
         await Promise.all(promises);
         //refresh
+        if (
+          selected.value.some(
+            (selection) => selection.id === route.params.userId
+          )
+        ) {
+          router.push('/users');
+        }
         selected.value = [];
         users.value = await api.users.list();
       } catch (err) {
@@ -186,16 +199,20 @@ async function deleteUsers() {
       //console.log('Called on OK or Cancel');
     });
 }
-const router = useRouter();
-const route = useRoute();
+
+setTimeout(() => {
+  console.log(route.params.userId);
+}, 3000);
+//  watch(users.value, function(oldVal, curVal){
+//    if(route.params.userId
+//router.push('/users');
+//  })
+
 function createUser() {
   router.push('/users/create');
 }
 function editUser(_: Event, row) {
   console.log(route.params);
-  // if (route.name.userId === row.id) {
-  //   router.push('/users');
-  // }
   if (route.params.userId === row.id) {
     router.push('/users');
   } else {
