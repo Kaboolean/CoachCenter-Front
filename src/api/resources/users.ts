@@ -4,10 +4,9 @@ import {
   ListUserQueryParameters,
   GetUserModel,
   CreateUserModel,
-  GetUserDetailsModel,
 } from '../models/users';
-import { GetCoachModel, GetCoachModelWithId } from '../models/coaches';
-import { GetClientModel, GetClientModelWithId } from '../models/clients';
+import { GetCoachModel, UpdateCoachModel } from '../models/coaches';
+import { GetClientModel, UpdateClientModel } from '../models/clients';
 
 const resource = 'users';
 
@@ -62,14 +61,14 @@ export default class UsersResource {
       throw err;
     }
   }
-  public async updateCoach(coach: GetCoachModelWithId) {
+  public async updateCoach(coach: UpdateCoachModel) {
     try {
       await http.put('/coaches', coach);
     } catch (err: any) {
       throw err;
     }
   }
-  public async updateClient(client: GetClientModelWithId) {
+  public async updateClient(client: UpdateClientModel) {
     try {
       await http.put('/clients', client);
     } catch (err: any) {

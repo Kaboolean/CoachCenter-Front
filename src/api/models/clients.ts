@@ -6,6 +6,11 @@ export interface GetClientModel {
   handicap: string;
 }
 
-export interface GetClientModelWithId extends GetClientModel {
+export interface UpdateClientModel {
   userId: string;
+  goal: string;
+  age: number;
+  height: number;
+  weight: number;
+  handicap: string;
 }

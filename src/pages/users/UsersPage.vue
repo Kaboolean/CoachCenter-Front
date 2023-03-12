@@ -1,24 +1,15 @@
 <template>
-  <div class="row">
-    <h4>{{ $t('users') }}</h4>
-    <q-btn
-      icon-right="refresh"
-      @click="refresh"
-      style="position: absolute; right: 12.5%"
-      >Refresh List</q-btn
-    >
-    <q-btn
-      v-if="selected.length"
-      @click="deleteUsers"
-      style="position: absolute; right: 20.5%"
-      >Delete {{ selected.length > 1 ? 'users ' : 'user ' }}</q-btn
-    >
-    <q-btn
-      icon-right="add_circle"
-      @click="createUser"
-      style="position: absolute; right: 5%"
-      >Create user</q-btn
-    >
+  <div class="row justify-center">
+    <div class="col">
+      <h4>{{ $t('users') }}</h4>
+    </div>
+    <div class="col-auto">
+      <q-btn icon-right="refresh" @click="refresh">Refresh List</q-btn>
+      <q-btn v-if="selected.length" @click="deleteUsers"
+        >Delete {{ selected.length > 1 ? 'users ' : 'user ' }}</q-btn
+      >
+      <q-btn icon-right="add_circle" @click="createUser">Create user</q-btn>
+    </div>
   </div>
 
   <div class="row q-mt-md">
@@ -68,7 +59,7 @@ import { useRouter, useRoute } from 'vue-router';
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue';
 //importation du DTO ListUserModel
 import { ListUserModel } from 'src/api/models/users';
-import { onBeforeMount, ref, watch } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 onBeforeMount(async () => {
   //utilisation de la méthode .list() de la classe UsersResource
   users.value = await api.users.list();
@@ -199,14 +190,6 @@ async function deleteUsers() {
       //console.log('Called on OK or Cancel');
     });
 }
-
-setTimeout(() => {
-  console.log(route.params.userId);
-}, 3000);
-//  watch(users.value, function(oldVal, curVal){
-//    if(route.params.userId
-//router.push('/users');
-//  })
 
 function createUser() {
   router.push('/users/create');

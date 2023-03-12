@@ -89,9 +89,9 @@
 
 <script setup lang="ts">
 import api from 'src/api';
-import { GetClientModel, GetClientModelWithId } from 'src/api/models/clients';
+import { GetClientModel, UpdateClientModel } from 'src/api/models/clients';
 import { onMounted, ref, defineEmits } from 'vue';
-const innerValue = ref<GetClientModelWithId>({
+const innerValue = ref<UpdateClientModel>({
   userId: '',
   goal: '',
   age: 0,

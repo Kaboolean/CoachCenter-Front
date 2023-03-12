@@ -66,10 +66,10 @@
 
 <script setup lang="ts">
 import api from 'src/api';
-import { GetCoachModel, GetCoachModelWithId } from 'src/api/models/coaches';
+import { GetCoachModel, UpdateCoachModel } from 'src/api/models/coaches';
 
 import { onMounted, ref } from 'vue';
-const innerValue = ref<GetCoachModelWithId>({
+const innerValue = ref<UpdateCoachModel>({
   userId: '',
   grades: '',
   description: '',

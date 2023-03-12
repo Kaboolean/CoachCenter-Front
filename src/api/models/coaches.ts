@@ -4,6 +4,9 @@ export interface GetCoachModel {
   hourlyRate: number;
 }
 
-export interface GetCoachModelWithId extends GetCoachModel {
+export interface UpdateCoachModel {
   userId: string;
+  grades: string;
+  description: string;
+  hourlyRate: number;
 }

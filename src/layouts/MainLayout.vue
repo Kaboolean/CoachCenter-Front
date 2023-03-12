@@ -47,7 +47,7 @@
 
         <div class="q-mt-lg" />
         <MenuLink
-          v-for="link in menuLinks"
+          v-for="link in availableMenuLinks"
           :key="link.title"
           :miniState="miniState"
           v-bind="link"
@@ -64,18 +64,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import MenuLink from 'src/components/MenuLink.vue';
+const availableMenuLinks = computed(() => {
+  const result = [...menuLinksDefault];
 
-const menuLinksDefault = [
-  {
-    title: 'Dashboard',
-    name: 'dashboard',
-    icon: 'home',
-    link: '/dashboard',
-  },
+  if (user.value.userType === 'client') {
+    result.push(...clientItems);
+  } else if (user.value.userType === 'coach') {
+    result.push(...coachItems);
+  } else if (user.value.userType === 'admin') {
+    result.push(...adminItems);
+  }
+  return result;
+});
+
+const adminItems = [
   {
     title: 'Admin',
     name: 'users',
@@ -83,8 +89,16 @@ const menuLinksDefault = [
     link: '/users',
   },
 ];
-const menuLinksDefaultLength = menuLinksDefault.length;
-const menuLinks = ref(menuLinksDefault);
+const menuLinksDefault = [
+  {
+    title: 'Dashboard',
+    name: 'dashboard',
+    icon: 'home',
+    link: '/dashboard',
+  },
+];
+// const menuLinksDefaultLength = menuLinksDefault.length;
+// const menuLinks = ref(menuLinksDefault);
 
 const clientItems = [
   {
@@ -92,6 +106,12 @@ const clientItems = [
     name: 'Account',
     icon: 'settings',
     link: '/account',
+  },
+  {
+    title: 'Find a session',
+    name: 'Sessions',
+    icon: 'fitness_center',
+    link: '/sessions',
   },
 ];
 const coachItems = [
@@ -101,36 +121,43 @@ const coachItems = [
     icon: 'settings',
     link: '/account',
   },
+  {
+    title: 'Create a session',
+    name: 'CreateSession',
+    icon: 'directions_run',
+    link: '/create',
+  },
 ];
 
 const store = useStore();
+const user = computed(() => store.getters['auth/getUser']);
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
-if (isAuthenticated.value.token) {
-  if (isAuthenticated.value.userType === 'client') {
-    menuLinks.value.push(...clientItems);
-  }
-  if (isAuthenticated.value.userType === 'coach') {
-    menuLinks.value.push(...coachItems);
-  }
-}
+// if (isAuthenticated.value.token) {
+//   if (isAuthenticated.value.userType === 'client') {
+//     menuLinks.value.push(...clientItems);
+//   }
+//   if (isAuthenticated.value.userType === 'coach') {
+//     menuLinks.value.push(...coachItems);
+//   }
+// }
 
-watch(isAuthenticated, function (curVal, oldVal) {
-  if (curVal.token) {
-    if (curVal.userType === 'client') {
-      menuLinks.value.push(...clientItems);
-    } else if (curVal.userType === 'coach') {
-      menuLinks.value.push(...coachItems);
-    }
-  }
-  if (!curVal.token) {
-    if (oldVal.userType === 'client') {
-      menuLinks.value.splice(menuLinksDefaultLength, clientItems.length);
-    }
-    if (oldVal.userType === 'coach') {
-      menuLinks.value.splice(menuLinksDefaultLength, coachItems.length);
-    }
-  }
-});
+// watch(isAuthenticated, function (curVal, oldVal) {
+//   if (curVal.token) {
+//     if (curVal.userType === 'client') {
+//       menuLinks.value.push(...clientItems);
+//     } else if (curVal.userType === 'coach') {
+//       menuLinks.value.push(...coachItems);
+//     }
+//   }
+//   if (!curVal.token) {
+//     if (oldVal.userType === 'client') {
+//       menuLinks.value.splice(menuLinksDefaultLength, clientItems.length);
+//     }
+//     if (oldVal.userType === 'coach') {
+//       menuLinks.value.splice(menuLinksDefaultLength, coachItems.length);
+//     }
+//   }
+// });
 
 const leftDrawerOpen = ref(false);
 const miniState = ref(false);

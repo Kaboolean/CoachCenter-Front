@@ -3,6 +3,7 @@ export default {
     const user = {
       token: state.token,
       userId: state.userId,
+      userType: state.userType,
     };
     return user;
   },
