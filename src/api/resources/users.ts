@@ -36,12 +36,10 @@ export default class UsersResource {
 
   public async getCoach(id: string) {
     const result = await http.get<GetCoachModel>(`coaches/${id}`);
-    console.log(result);
     return result.data.data;
   }
   public async getClient(id: string) {
     const result = await http.get<GetClientModel>(`clients/${id}`);
-    console.log(result);
     return result.data.data;
   }
 

@@ -2,7 +2,7 @@
   <div class="container">
     <EditUser v-if="user" :user="user" @updateUser="update"> </EditUser>
 
-    <q-btn @click="details">
+    <q-btn @click="details" class="q-my-md">
       {{ displayDetails ? 'Hide' : 'Show' }} user type details</q-btn
     >
 

@@ -4,11 +4,15 @@
       <h4>{{ $t('users') }}</h4>
     </div>
     <div class="col-auto">
-      <q-btn icon-right="refresh" @click="refresh">Refresh List</q-btn>
-      <q-btn v-if="selected.length" @click="deleteUsers"
+      <q-btn class="q-ml-sm" icon-right="refresh" @click="refresh"
+        >Refresh List</q-btn
+      >
+      <q-btn class="q-ml-sm" v-if="selected.length" @click="deleteUsers"
         >Delete {{ selected.length > 1 ? 'users ' : 'user ' }}</q-btn
       >
-      <q-btn icon-right="add_circle" @click="createUser">Create user</q-btn>
+      <q-btn class="q-ml-sm" icon-right="add_circle" @click="createUser"
+        >Create user</q-btn
+      >
     </div>
   </div>
 
@@ -57,7 +61,6 @@ import api from 'src/api/index';
 import { useQuasar } from 'quasar';
 import { useRouter, useRoute } from 'vue-router';
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue';
-//importation du DTO ListUserModel
 import { ListUserModel } from 'src/api/models/users';
 import { onBeforeMount, ref } from 'vue';
 onBeforeMount(async () => {
@@ -179,6 +182,10 @@ async function deleteUsers() {
         }
         selected.value = [];
         users.value = await api.users.list();
+        $q.notify({
+          message: 'User(s) deleted.',
+          color: 'primary',
+        });
       } catch (err) {
         console.log(err);
       }
@@ -195,7 +202,6 @@ function createUser() {
   router.push('/users/create');
 }
 function editUser(_: Event, row) {
-  console.log(route.params);
   if (route.params.userId === row.id) {
     router.push('/users');
   } else {

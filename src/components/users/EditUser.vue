@@ -17,9 +17,16 @@
                   type="text"
                   v-model="innerValue.userName"
                   lazy-rules
+                  :rules="[
+                    () =>
+                      (innerValue.userName &&
+                        innerValue.userName.length > 6 &&
+                        innerValue.userName.length < 25) ||
+                      'Enter a correct Username',
+                  ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-small"
+                  class="qinput-width-small q-mb-sm"
                 />
               </div>
             </div>
@@ -33,9 +40,14 @@
                   type="email"
                   v-model="innerValue.email"
                   lazy-rules
+                  :rules="[
+                    () =>
+                      (innerValue.email && innerValue.email.includes('@')) ||
+                      'Enter an email',
+                  ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -51,9 +63,16 @@
                   type="text"
                   v-model="innerValue.firstName"
                   lazy-rules
+                  :rules="[
+                    () =>
+                      (innerValue.firstName &&
+                        innerValue.firstName.length > 3 &&
+                        innerValue.firstName.length < 15) ||
+                      'Enter a correct firstname',
+                  ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-small"
+                  class="qinput-width-small q-mb-sm"
                 />
               </div>
             </div>
@@ -67,9 +86,16 @@
                   type="text"
                   v-model="innerValue.lastName"
                   lazy-rules
+                  :rules="[
+                    () =>
+                      (innerValue.lastName &&
+                        innerValue.lastName.length > 3 &&
+                        innerValue.lastName.length < 15) ||
+                      'Enter a correct lastname',
+                  ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -78,24 +104,11 @@
         <div class="row">
           <div class="col-md-4 col-xs-12">
             <div class="row items-center">
-              <div class="col-auto">Birthdate :</div>
               <div class="col">
-                <q-input
-                  filled
-                  type="text"
+                <user-date
                   v-model="innerValue.birthDate"
-                  lazy-rules
-                  hide-bottom-space
-                  dense
-                  class="qinput-width-small"
-                >
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy>
-                        <q-date v-model="innerValue.birthDate"></q-date>
-                      </q-popup-proxy>
-                    </q-icon> </template
-                ></q-input>
+                  label="Birthdate"
+                ></user-date>
               </div>
             </div>
           </div>
@@ -110,6 +123,7 @@
 import api from 'src/api';
 import { GetUserModel } from 'src/api/models/users';
 import { defineEmits, onMounted, ref } from 'vue';
+import { useQuasar } from 'quasar';
 const innerValue = ref<GetUserModel>({
   id: '',
   userName: '',
@@ -135,6 +149,7 @@ onMounted(() => {
 });
 
 const emit = defineEmits(['updateUser']);
+const $q = useQuasar();
 async function updateUser() {
   await api.users.updateUser({
     id: innerValue.value.id,
@@ -147,6 +162,10 @@ async function updateUser() {
     userType: innerValue.value.userType,
   });
   emit('updateUser');
+  $q.notify({
+    message: 'User updated.',
+    color: 'primary',
+  });
 }
 </script>
 

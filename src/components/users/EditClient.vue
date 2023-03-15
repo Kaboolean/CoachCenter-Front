@@ -14,10 +14,9 @@
                   filled
                   type="text"
                   v-model="innerValue.goal"
-                  lazy-rules
                   hide-bottom-space
                   dense
-                  class="qinput-width-small"
+                  class="qinput-width-small q-mb-sm"
                 />
               </div>
             </div>
@@ -33,11 +32,13 @@
                   v-model="innerValue.height"
                   lazy-rules
                   :rules="[
-                    (val) => (val && val.length > 0) || 'Please enter a value',
+                    () =>
+                      (innerValue.height && innerValue.height > 0) ||
+                      'Please enter a value',
                   ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -52,11 +53,13 @@
                   v-model="innerValue.weight"
                   lazy-rules
                   :rules="[
-                    (val) => (val && val.length > 0) || 'Please enter a value',
+                    () =>
+                      (innerValue.weight && innerValue.weight > 0) ||
+                      'Please enter a value',
                   ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -69,13 +72,9 @@
                   filled
                   type="text"
                   v-model="innerValue.handicap"
-                  lazy-rules
-                  :rules="[
-                    (val) => (val && val.length > 0) || 'Please enter a value',
-                  ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -90,7 +89,9 @@
 <script setup lang="ts">
 import api from 'src/api';
 import { GetClientModel, UpdateClientModel } from 'src/api/models/clients';
-import { onMounted, ref, defineEmits } from 'vue';
+import { onBeforeMount, ref, defineEmits } from 'vue';
+import { useQuasar } from 'quasar';
+
 const innerValue = ref<UpdateClientModel>({
   userId: '',
   goal: '',
@@ -104,7 +105,7 @@ const props = defineProps<{
   client: GetClientModel;
 }>();
 
-onMounted(() => {
+onBeforeMount(() => {
   innerValue.value.userId = props.userId;
   innerValue.value.goal = props.client?.goal;
   innerValue.value.age = props.client?.age;
@@ -114,8 +115,8 @@ onMounted(() => {
 });
 
 const emit = defineEmits(['updateClient']);
+const $q = useQuasar();
 async function updateClient() {
-  console.log(innerValue.value.goal, ' ', innerValue.value.height);
   await api.users.updateClient({
     userId: innerValue.value.userId,
     goal: innerValue.value.goal,
@@ -125,5 +126,9 @@ async function updateClient() {
     handicap: innerValue.value.handicap,
   });
   emit('updateClient');
+  $q.notify({
+    message: 'Client details updated.',
+    color: 'primary',
+  });
 }
 </script>

@@ -14,13 +14,22 @@
         <q-toolbar-title> Coach Center </q-toolbar-title>
 
         <div v-if="!isAuthenticated.token">
-          <q-btn to="/register">Register</q-btn>
+          <q-btn to="/register" class="q-ml-sm"
+            >Register
+            <q-icon name="person_add" style="margin-left: 5px"></q-icon>
+          </q-btn>
         </div>
         <div v-if="!isAuthenticated.token">
-          <q-btn to="/login">Login</q-btn>
+          <q-btn to="/login" class="q-ml-sm"
+            >Login
+            <q-icon name="login" style="margin-left: 5px"></q-icon>
+          </q-btn>
         </div>
         <div v-else>
-          <q-btn @click="logout">Logout</q-btn>
+          <q-btn @click="logout" class="q-ml-sm"
+            >Logout
+            <q-icon name="logout" style="margin-left: 5px"></q-icon>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -67,6 +76,7 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import MenuLink from 'src/components/MenuLink.vue';
 const availableMenuLinks = computed(() => {
   const result = [...menuLinksDefault];
@@ -81,6 +91,15 @@ const availableMenuLinks = computed(() => {
   return result;
 });
 
+const menuLinksDefault = [
+  {
+    title: 'Home page',
+    name: 'homepage',
+    icon: 'home',
+    link: '/homepage',
+  },
+];
+
 const adminItems = [
   {
     title: 'Admin',
@@ -89,16 +108,6 @@ const adminItems = [
     link: '/users',
   },
 ];
-const menuLinksDefault = [
-  {
-    title: 'Dashboard',
-    name: 'dashboard',
-    icon: 'home',
-    link: '/dashboard',
-  },
-];
-// const menuLinksDefaultLength = menuLinksDefault.length;
-// const menuLinks = ref(menuLinksDefault);
 
 const clientItems = [
   {
@@ -111,7 +120,7 @@ const clientItems = [
     title: 'Find a session',
     name: 'Sessions',
     icon: 'fitness_center',
-    link: '/sessions',
+    link: '/sessions/find',
   },
 ];
 const coachItems = [
@@ -122,42 +131,28 @@ const coachItems = [
     link: '/account',
   },
   {
+    title: 'See all sessions',
+    name: 'Sessions',
+    icon: 'fitness_center',
+    link: '/sessions/find',
+  },
+  {
     title: 'Create a session',
     name: 'CreateSession',
     icon: 'directions_run',
-    link: '/create',
+    link: '/sessions/create',
+  },
+  {
+    title: 'Created sessions',
+    name: 'CreateSession',
+    icon: 'sports_score',
+    link: '/sessions/list',
   },
 ];
 
 const store = useStore();
 const user = computed(() => store.getters['auth/getUser']);
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
-// if (isAuthenticated.value.token) {
-//   if (isAuthenticated.value.userType === 'client') {
-//     menuLinks.value.push(...clientItems);
-//   }
-//   if (isAuthenticated.value.userType === 'coach') {
-//     menuLinks.value.push(...coachItems);
-//   }
-// }
-
-// watch(isAuthenticated, function (curVal, oldVal) {
-//   if (curVal.token) {
-//     if (curVal.userType === 'client') {
-//       menuLinks.value.push(...clientItems);
-//     } else if (curVal.userType === 'coach') {
-//       menuLinks.value.push(...coachItems);
-//     }
-//   }
-//   if (!curVal.token) {
-//     if (oldVal.userType === 'client') {
-//       menuLinks.value.splice(menuLinksDefaultLength, clientItems.length);
-//     }
-//     if (oldVal.userType === 'coach') {
-//       menuLinks.value.splice(menuLinksDefaultLength, coachItems.length);
-//     }
-//   }
-// });
 
 const leftDrawerOpen = ref(false);
 const miniState = ref(false);
@@ -176,10 +171,15 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
+const $q = useQuasar();
 const router = useRouter();
 async function logout() {
   await store.dispatch('auth/logout');
   router.replace({ path: '/' });
+  $q.notify({
+    message: 'See you soon',
+    color: 'primary',
+  });
 }
 </script>
 

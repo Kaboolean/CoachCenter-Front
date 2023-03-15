@@ -1,5 +1,10 @@
 import http from '../http';
-import { ListSessionModel } from '../models/sessions';
+import {
+  ListSessionModel,
+  GetSessionModel,
+  CreateSessionModel,
+  UpdateSessionModel,
+} from '../models/sessions';
 
 const resource = 'sessions';
 
@@ -11,5 +16,39 @@ export default class SessionsResource {
   public async SessionsList() {
     const result = await http.get<ListSessionModel[]>(`${resource}`);
     return result.data;
+  }
+  public async GetSessionById(id: string) {
+    const result = await http.get<GetSessionModel>(`${resource}/${id}`);
+    return result.data.data;
+  }
+
+  public async GetCoachSessions(id: string) {
+    const result = await http.get<ListSessionModel[]>(
+      `${resource}/${id}/coach`
+    );
+    return result.data.data;
+  }
+
+  public async JoinSession(sessionId: string) {
+    console.log(sessionId);
+    await http.post(`${resource}/${sessionId}`);
+  }
+
+  public async CreateSession(session: CreateSessionModel) {
+    const result = await http.post<string>(`${resource}`, session);
+    return result.data;
+  }
+
+  public async UpdateSession(session: UpdateSessionModel) {
+    const result = await http.put<string>(`${resource}`, session);
+    return result.data;
+  }
+
+  public async DeleteSession(id: string) {
+    try {
+      await http.delete(`${resource}/${id}`);
+    } catch (err: any) {
+      throw err;
+    }
   }
 }

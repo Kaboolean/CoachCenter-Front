@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <q-page class="flex flex-center fixed-center">
-      <login-form
-        @loginSubmitted="submitLogin"
-        :errorMessage="errorMessage"
-      ></login-form>
-    </q-page>
+  <div class="row items-center justify-center">
+    <login-form
+      @loginSubmitted="submitLogin"
+      :errorMessage="errorMessage"
+    ></login-form>
   </div>
 </template>
 

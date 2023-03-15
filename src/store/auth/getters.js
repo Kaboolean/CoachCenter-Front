@@ -13,9 +13,6 @@ export default {
   getUserType(state) {
     return state.userType;
   },
-  // isAuthenticated(state) {
-  //   return !!state.token;
-  // },
   isAuthenticated(state) {
     const user = {
       token: !!state.token,

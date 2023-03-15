@@ -14,7 +14,11 @@
         </div>
         <div>
           <q-icon name="surfing" size="sm"></q-icon>
-          {{ session.participantCount }} participants
+          {{
+            session.participantCount
+              ? `${session.participantCount} participants`
+              : message
+          }}
         </div>
         <q-chip
           v-for="tag in session.tags"
@@ -32,8 +36,7 @@
 <script setup lang="ts">
 import { formatDate } from 'src/utils/dateUtils';
 import { defineProps } from 'vue';
-import { ref } from 'vue';
 
 import { ListSessionModel } from 'src/api/models/sessions';
-const props = defineProps<{ session: ListSessionModel }>();
+const props = defineProps<{ session: ListSessionModel; message: string }>();
 </script>

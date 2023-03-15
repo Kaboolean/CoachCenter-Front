@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="q-mt-md">
     <q-card-section>
       <q-form @submit.prevent="createUser" class="q-gutter-md">
         <div class="row items-center">
@@ -16,6 +16,11 @@
                   type="text"
                   v-model="userName"
                   lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 6 && val.length < 25) ||
+                      'Enter a correct Username',
+                  ]"
                   hide-bottom-space
                   dense
                   class="qinput-width-small"
@@ -32,6 +37,9 @@
                   type="email"
                   v-model="email"
                   lazy-rules
+                  :rules="[
+                    (val) => (val && val.includes('@')) || 'Enter an email',
+                  ]"
                   hide-bottom-space
                   dense
                   class="qinput-width-medium"
@@ -50,6 +58,16 @@
                   type="text"
                   v-model="password"
                   lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val !== null && val !== '') || 'Please enter a password',
+                    (val) =>
+                      val.length >= 6 ||
+                      'Please enter a password size between 6 and 15 characters',
+                    (val) =>
+                      regex.test(val) ||
+                      'Password must contain at least a digit',
+                  ]"
                   hide-bottom-space
                   dense
                   class="qinput-width-small"
@@ -79,15 +97,18 @@ import api from 'src/api';
 import { ref, defineEmits } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { UserType } from 'src/api/models/users';
+import { useQuasar } from 'quasar';
 
 const userName = ref('');
 const email = ref('');
 const password = ref('');
+const regex = /\d/;
 const userType = ref<UserType>(UserType.client);
 const userTypeArray = ['coach', 'client'];
 
 const emit = defineEmits(['update']);
 const router = useRouter();
+const $q = useQuasar();
 async function createUser() {
   try {
     const userId = await api.users.register({
@@ -96,11 +117,12 @@ async function createUser() {
       password: password.value,
       userType: userType.value,
     });
-    console.log(userId);
     emit('update');
-    setTimeout(() => {
-      router.push(`/users/${userId}`);
-    }, 2000);
+    router.push(`/users/${userId}`);
+    $q.notify({
+      message: 'User created.',
+      color: 'primary',
+    });
   } catch (err) {
     console.log(err);
   }

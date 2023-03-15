@@ -14,7 +14,7 @@ const didAutoLogout = computed(() => store.getters['auth/isAutoLogout']);
 
 watch(didAutoLogout, function (curVal, oldVal) {
   if (curVal && curVal != oldVal) {
-    router.replace('/dashboard');
+    router.replace('/homepage');
   }
 });
 </script>

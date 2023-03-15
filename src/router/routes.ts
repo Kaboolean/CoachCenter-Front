@@ -3,10 +3,10 @@ import { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/dashboard',
+    redirect: '/homepage',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '/dashboard', component: () => import('pages/IndexPage.vue') },
+      { path: '/homepage', component: () => import('pages/IndexPage.vue') },
       //admin
       {
         path: '/users',
@@ -30,14 +30,30 @@ const routes: RouteRecordRaw[] = [
         path: '/account',
         component: () => import('src/pages/account/UserAccount.vue'),
       },
+      {
+        path: '/account/client/edit/:userId',
+        name: 'edit-client',
+        component: () => import('src/pages/account/EditAccountDetails.vue'),
+        props: true,
+      },
       //coaches
       {
-        path: '/create',
+        path: '/sessions/create',
         component: () => import('src/pages/coach/CreateSession.vue'),
+      },
+      {
+        path: '/sessions/list',
+        component: () => import('src/pages/coach/CoachSessions.vue'),
+      },
+      {
+        path: '/sessions/list/:sessionId',
+        name: 'edit-session',
+        component: () => import('src/pages/coach/EditSession.vue'),
+        props: true,
       },
       //clients
       {
-        path: '/sessions',
+        path: '/sessions/find',
         component: () => import('src/pages/client/FindSession.vue'),
       },
       //auth

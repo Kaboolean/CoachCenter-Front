@@ -14,10 +14,9 @@
                   filled
                   type="text"
                   v-model="innerValue.grades"
-                  lazy-rules
                   hide-bottom-space
                   dense
-                  class="qinput-width-small"
+                  class="qinput-width-small q-mb-sm"
                 />
               </div>
             </div>
@@ -30,10 +29,9 @@
                   filled
                   type="text"
                   v-model="innerValue.description"
-                  lazy-rules
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -48,11 +46,13 @@
                   v-model="innerValue.hourlyRate"
                   lazy-rules
                   :rules="[
-                    (val) => (val && val.length > 0) || 'Please enter a value',
+                    () =>
+                      (innerValue.hourlyRate && innerValue.hourlyRate > 0) ||
+                      'Please enter a value',
                   ]"
                   hide-bottom-space
                   dense
-                  class="qinput-width-medium"
+                  class="qinput-width-medium q-mb-sm"
                 />
               </div>
             </div>
@@ -67,8 +67,9 @@
 <script setup lang="ts">
 import api from 'src/api';
 import { GetCoachModel, UpdateCoachModel } from 'src/api/models/coaches';
-
+import { useQuasar } from 'quasar';
 import { onMounted, ref } from 'vue';
+
 const innerValue = ref<UpdateCoachModel>({
   userId: '',
   grades: '',
@@ -88,6 +89,7 @@ onMounted(() => {
 });
 
 const emit = defineEmits(['updateCoach']);
+const $q = useQuasar();
 async function updateCoach() {
   await api.users.updateCoach({
     userId: innerValue.value.userId,
@@ -96,5 +98,9 @@ async function updateCoach() {
     hourlyRate: innerValue.value.hourlyRate,
   });
   emit('updateCoach');
+  $q.notify({
+    message: 'Coach details updated.',
+    color: 'primary',
+  });
 }
 </script>
