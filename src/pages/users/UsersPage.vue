@@ -167,11 +167,14 @@ async function deleteUsers() {
     .onOk(async () => {
       try {
         //delete
-        const promises: Promise<void>[] = [];
-        selected.value.forEach((selection) =>
-          promises.push(api.users.deleteUserById(selection.id))
-        );
-        await Promise.all(promises);
+        //const promises: Promise<void>[] = [];
+        for (var item of selected.value) {
+          await api.users.deleteUserById(item.id);
+        }
+        // selected.value.forEach((selection) =>
+        //   promises.push(api.users.deleteUserById(selection.id))
+        // );
+        // await Promise.all(promises);
         //refresh
         if (
           selected.value.some(
