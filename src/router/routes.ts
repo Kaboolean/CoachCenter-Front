@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/users',
         component: () => import('src/pages/users/UsersPage.vue'),
+        meta: { requiredRoles: ['admin'] },
         children: [
           {
             name: 'user-create',
@@ -40,6 +41,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/sessions/create',
         component: () => import('src/pages/coach/CreateSession.vue'),
+        meta: { requiredRoles: ['coach'] },
       },
       {
         path: '/sessions/list',

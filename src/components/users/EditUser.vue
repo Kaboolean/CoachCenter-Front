@@ -1,108 +1,92 @@
 <template>
   <q-card>
     <q-card-section>
-      <q-form @submit.prevent="updateUser" class="q-gutter-md">
+      <q-form @submit.prevent="updateUser">
         <!-- <div class="row items-center">
           <div class="text-h5 q-mr-md">Edit the selected user</div>
           <span>{{ user.id }}</span>
         </div> -->
 
-        <div class="row">
-          <div class="col-md-4 col-xs-12">
-            <div class="row items-center">
-              <div class="col-auto">Username :</div>
-              <div class="col">
-                <q-input
-                  filled
-                  type="text"
-                  v-model="innerValue.userName"
-                  lazy-rules
-                  :rules="[
-                    () =>
-                      (innerValue.userName &&
-                        innerValue.userName.length > 6 &&
-                        innerValue.userName.length < 25) ||
-                      'Enter a correct Username',
-                  ]"
-                  hide-bottom-space
-                  dense
-                  class="qinput-width-small q-mb-sm"
-                />
-              </div>
-            </div>
+        <div class="row q-col-gutter-md">
+          <div class="col-md-6 col-xs-12">
+            <user-input
+              filled
+              type="text"
+              label="Username"
+              v-model="innerValue.userName"
+              lazy-rules
+              :rules="[
+                () =>
+                  (innerValue.userName &&
+                    innerValue.userName.length > 5 &&
+                    innerValue.userName.length < 25) ||
+                  'Enter a correct Username',
+              ]"
+              hide-bottom-space
+              dense
+              class="qinput-width-small q-mb-sm"
+            />
           </div>
-          <div class="col-md-4 col-xs-12">
-            <div class="row items-center">
-              <div class="col-auto">Email :</div>
-              <div class="col">
-                <q-input
-                  filled
-                  type="email"
-                  v-model="innerValue.email"
-                  lazy-rules
-                  :rules="[
-                    () =>
-                      (innerValue.email && innerValue.email.includes('@')) ||
-                      'Enter an email',
-                  ]"
-                  hide-bottom-space
-                  dense
-                  class="qinput-width-medium q-mb-sm"
-                />
-              </div>
-            </div>
+          <div class="col-md-6 col-xs-12">
+            <user-input
+              filled
+              label="Email"
+              type="email"
+              v-model="innerValue.email"
+              lazy-rules
+              :rules="[
+                () =>
+                  (innerValue.email && innerValue.email.includes('@')) ||
+                  'Enter an email',
+              ]"
+              hide-bottom-space
+              dense
+              class="qinput-width-medium q-mb-sm"
+            />
+          </div>
+        </div>
+        <div class="row q-col-gutter-md">
+          <div class="col-md-6 col-xs-12">
+            <user-input
+              filled
+              label="Firstname"
+              type="text"
+              v-model="innerValue.firstName"
+              lazy-rules
+              :rules="[
+                () =>
+                  (innerValue.firstName &&
+                    innerValue.firstName.length > 3 &&
+                    innerValue.firstName.length < 15) ||
+                  'Enter a correct firstname',
+              ]"
+              hide-bottom-space
+              dense
+              class="qinput-width-small q-mb-sm"
+            />
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <user-input
+              filled
+              label="Lastname"
+              type="text"
+              v-model="innerValue.lastName"
+              lazy-rules
+              :rules="[
+                () =>
+                  (innerValue.lastName &&
+                    innerValue.lastName.length > 3 &&
+                    innerValue.lastName.length < 15) ||
+                  'Enter a correct lastname',
+              ]"
+              hide-bottom-space
+              dense
+              class="qinput-width-medium q-mb-sm"
+            />
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4 col-xs-12">
-            <div class="row items-center">
-              <div class="col-auto">Firstname :</div>
-              <div class="col">
-                <q-input
-                  filled
-                  type="text"
-                  v-model="innerValue.firstName"
-                  lazy-rules
-                  :rules="[
-                    () =>
-                      (innerValue.firstName &&
-                        innerValue.firstName.length > 3 &&
-                        innerValue.firstName.length < 15) ||
-                      'Enter a correct firstname',
-                  ]"
-                  hide-bottom-space
-                  dense
-                  class="qinput-width-small q-mb-sm"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-xs-12">
-            <div class="row items-center">
-              <div class="col-auto">Lastname :</div>
-              <div class="col">
-                <q-input
-                  filled
-                  type="text"
-                  v-model="innerValue.lastName"
-                  lazy-rules
-                  :rules="[
-                    () =>
-                      (innerValue.lastName &&
-                        innerValue.lastName.length > 3 &&
-                        innerValue.lastName.length < 15) ||
-                      'Enter a correct lastname',
-                  ]"
-                  hide-bottom-space
-                  dense
-                  class="qinput-width-medium q-mb-sm"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-xs-12">
+          <div class="col-md-6 col-xs-12">
             <div class="row items-center">
               <div class="col">
                 <user-date
@@ -113,7 +97,7 @@
             </div>
           </div>
         </div>
-        <q-btn type="submitForm">Update</q-btn>
+        <q-btn type="submitForm" class="q-mt-md">Update</q-btn>
       </q-form>
     </q-card-section>
   </q-card>

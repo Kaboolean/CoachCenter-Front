@@ -2,7 +2,7 @@
   <h5 v-if="coachSessionsList.length < 1">
     You haven't created any session yet
   </h5>
-  <div class="row justify-center">
+  <div class="row justify-center" v-if="coachSessionsList.length">
     <h5>Sessions you created</h5>
   </div>
   <div class="row">

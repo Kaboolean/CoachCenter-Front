@@ -7,7 +7,7 @@ import {
 } from 'vue-router';
 
 import routes from './routes';
-//import store from 'src/store';
+
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -17,7 +17,7 @@ import routes from './routes';
  * with the Router instance.
  */
 
-export default route(function (/* {store, ssrContext } */) {
+export default route(function ({ store }) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : process.env.VUE_ROUTER_MODE === 'history'
@@ -37,15 +37,15 @@ export default route(function (/* {store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  // Router.beforeEach(async (to, _) => {
-  //   const test = store.getters['users/getUser'];
-  //   if (
-  //     store.getters['users/getUser'].user.userType !== 'admin' &&
-  //     to.path === '/users'
-  //   ) {
-  //     return { path: '/homepage' };
-  //   }
-  // });
+  Router.beforeEach(async (to: { meta: any }, from, next) => {
+    const roleType = store.getters['auth/getUserType'];
+    if (to.meta.requiredRoles && !to.meta.requiredRoles.includes(roleType)) {
+      next(false);
+      return;
+    }
+
+    next();
+  });
 
   return Router;
 });
