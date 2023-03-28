@@ -54,3 +54,11 @@ export enum UserType {
   coach = 'coach',
   client = 'client',
 }
+
+export interface ListParticipantModel {
+  age: number;
+  userId: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+}

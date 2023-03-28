@@ -5,7 +5,7 @@ import {
   CreateSessionModel,
   UpdateSessionModel,
 } from '../models/sessions';
-
+import { ListParticipantModel } from '../models/users';
 const resource = 'sessions';
 
 //classe exportée puis importée dans src/api/index.ts
@@ -19,6 +19,14 @@ export default class SessionsResource {
   }
   public async GetSessionById(id: string) {
     const result = await http.get<GetSessionModel>(`${resource}/${id}`);
+    return result.data.data;
+  }
+
+  public async GetSessionParticipants(id: string) {
+    const result = await http.get<ListParticipantModel>(
+      `${resource}/${id}/participants`
+    );
+    console.log(result.data.data);
     return result.data.data;
   }
 

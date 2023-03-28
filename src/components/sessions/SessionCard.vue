@@ -38,5 +38,8 @@ import { formatDate } from 'src/utils/dateUtils';
 import { defineProps } from 'vue';
 
 import { ListSessionModel } from 'src/api/models/sessions';
-const props = defineProps<{ session: ListSessionModel; message: string }>();
+const props = defineProps<{
+  session: ListSessionModel;
+  message: string | null;
+}>();
 </script>

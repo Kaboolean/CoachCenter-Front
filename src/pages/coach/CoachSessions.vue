@@ -13,6 +13,7 @@
       :session="session"
       :message="'Personne ne participe encore'"
       clickable
+      @click="checkSession(session.id)"
       @dblclick="editSession(session.id)"
     ></SessionCard>
   </div>
@@ -34,6 +35,14 @@ onBeforeMount(async () => {
 });
 
 const router = useRouter();
+function checkSession(id: string) {
+  router.push({
+    name: 'check-session',
+    params: {
+      sessionId: id,
+    },
+  });
+}
 function editSession(id: string) {
   router.push({
     name: 'edit-session',

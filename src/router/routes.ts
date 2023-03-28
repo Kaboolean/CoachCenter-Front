@@ -49,6 +49,12 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/sessions/list/:sessionId',
+        name: 'check-session',
+        component: () => import('src/pages/coach/CheckSession.vue'),
+        props: true,
+      },
+      {
+        path: '/sessions/list/edit/:sessionId',
         name: 'edit-session',
         component: () => import('src/pages/coach/EditSession.vue'),
         props: true,
