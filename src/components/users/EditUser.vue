@@ -2,13 +2,8 @@
   <q-card>
     <q-card-section>
       <q-form @submit.prevent="updateUser">
-        <!-- <div class="row items-center">
-          <div class="text-h5 q-mr-md">Edit the selected user</div>
-          <span>{{ user.id }}</span>
-        </div> -->
-
-        <div class="row q-col-gutter-md">
-          <div class="col-md-6 col-xs-12">
+        <div class="row q-col-gutter-md q-pt-sm">
+          <div v-if="!userNameNoChange" class="col-md-6 col-xs-12">
             <user-input
               filled
               type="text"
@@ -27,7 +22,7 @@
               class="qinput-width-small q-mb-sm"
             />
           </div>
-          <div class="col-md-6 col-xs-12">
+          <div v-if="!emailNoChange" class="col-md-6 col-xs-12">
             <user-input
               filled
               label="Email"
@@ -45,8 +40,8 @@
             />
           </div>
         </div>
-        <div class="row q-col-gutter-md">
-          <div class="col-md-6 col-xs-12">
+        <div class="row q-col-gutter-md q-pt-sm">
+          <div v-if="!firstNameNoChange" class="col-md-6 col-xs-12">
             <user-input
               filled
               label="Firstname"
@@ -65,7 +60,7 @@
               class="qinput-width-small q-mb-sm"
             />
           </div>
-          <div class="col-md-6 col-xs-12">
+          <div v-if="!lastNameNoChange" class="col-md-6 col-xs-12">
             <user-input
               filled
               label="Lastname"
@@ -75,7 +70,7 @@
               :rules="[
                 () =>
                   (innerValue.lastName &&
-                    innerValue.lastName.length > 3 &&
+                    innerValue.lastName.length > 1 &&
                     innerValue.lastName.length < 15) ||
                   'Enter a correct lastname',
               ]"
@@ -85,8 +80,8 @@
             />
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6 col-xs-12">
+        <div v-if="!birthDateNoChange" class="row">
+          <div class="col-md-6 col-xs-12 q-pt-sm">
             <div class="row items-center">
               <div class="col">
                 <user-date
@@ -120,6 +115,11 @@ const innerValue = ref<GetUserModel>({
 });
 const props = defineProps<{
   user: GetUserModel;
+  userNameNoChange?: boolean;
+  emailNoChange?: boolean;
+  firstNameNoChange?: boolean;
+  lastNameNoChange?: boolean;
+  birthDateNoChange?: boolean;
 }>();
 onMounted(() => {
   innerValue.value.id = props.user.id;

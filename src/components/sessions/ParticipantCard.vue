@@ -5,7 +5,7 @@
         <div class="text-h6">
           {{ participant.firstName }} {{ participant.lastName }}
         </div>
-        <div class="text-subtitle2">{{ participant.age }}</div>
+        <div class="text-subtitle2">{{ participant.age }} yo</div>
       </q-card-section>
 
       <q-separator />

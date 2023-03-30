@@ -1,13 +1,17 @@
 <template>
   <q-page>
-    <div class="row">
+    <div v-if="!editUserNullField" class="row">
       <EditUser
         v-if="userModel"
         :user="userModel"
+        :userNameNoChange="true"
+        :emailNoChange="true"
+        :firstNameNoChange="!!userModel.firstName"
+        :lastNameNoChange="!!userModel.lastName"
+        :birthDateNoChange="!!userModel.birthDate"
         @updateUser="update"
       ></EditUser>
     </div>
-
     <div class="row">
       <q-btn @click="details" class="q-my-md">
         {{ displayDetails ? 'Hide' : 'Show more' }} personnal data</q-btn
@@ -34,7 +38,8 @@
 <script setup lang="ts">
 import api from 'src/api';
 import { useStore } from 'vuex';
-import { onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { onBeforeMount, ref, computed } from 'vue';
 import { GetClientModel } from 'src/api/models/clients';
 import { GetCoachModel } from 'src/api/models/coaches';
 import { GetUserModel } from 'src/api/models/users';
@@ -58,11 +63,20 @@ onBeforeMount(async () => {
   }
 });
 
+const editUserNullField = computed(() => {
+  return (
+    !!userModel.value?.firstName &&
+    !!userModel.value?.lastName &&
+    !!userModel.value?.birthDate
+  );
+});
+
 function details() {
   displayDetails.value = !displayDetails.value;
 }
 
+const router = useRouter();
 function update() {
-  console.log('ok');
+  router.go(0);
 }
 </script>
