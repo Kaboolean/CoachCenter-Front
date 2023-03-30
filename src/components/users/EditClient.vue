@@ -2,9 +2,6 @@
   <q-card>
     <q-card-section>
       <q-form @submit.prevent="updateClient" class="q-gutter-md">
-        <!-- <div class="row items-center">
-          <div class="text-h5 q-mr-xs">Edit coach details</div>
-        </div> -->
         <div class="row">
           <div class="col-md-3 col-xs-12">
             <div class="row items-center">
