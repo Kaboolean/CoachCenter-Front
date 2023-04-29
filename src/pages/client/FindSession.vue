@@ -25,22 +25,20 @@ import { useQuasar } from 'quasar';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
+const store = useStore();
+const user = store.getters['auth/getUser'];
 const sessionsList = ref<ListSessionModel[]>([]);
 const clientInfo = ref();
 onBeforeMount(async () => {
   sessionsList.value = await api.sessions.SessionsList();
-  const user = store.getters['auth/getUser'];
   if (user.userType === 'client') {
     clientInfo.value = await api.users.getUserById(user.userId);
-    console.log(clientInfo.value);
   }
 });
 
 const router = useRouter();
 const $q = useQuasar();
-const store = useStore();
 async function subscribeToSession(sessionId: string) {
-  const user = store.getters['auth/getUser'];
   if (user.userType !== 'client') {
     return;
   }
@@ -48,7 +46,6 @@ async function subscribeToSession(sessionId: string) {
     clientInfo.value.firstName === null ||
     clientInfo.value.birthDate === null
   ) {
-    console.log('Update your profile first before joining sessions');
     $q.dialog({
       component: ConfirmDialog,
 

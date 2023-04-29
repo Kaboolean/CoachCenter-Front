@@ -5,7 +5,8 @@
     </div>
     <div class="row justify-center">
       <SessionCard
-        :session="session"
+        v-if="session"
+        :session="session!"
         :message="null"
         class="q-mb-sm q-mr-sm"
       ></SessionCard>
@@ -25,11 +26,14 @@
 import { onBeforeMount, ref } from 'vue';
 import ParticipantCard from 'src/components/sessions/ParticipantCard.vue';
 import SessionCard from 'src/components/sessions/SessionCard.vue';
+
 import { ListParticipantModel } from 'src/api/models/users';
+import { GetSessionModel } from 'src/api/models/sessions';
+
 import api from 'src/api';
 
 const participantList = ref<ListParticipantModel[]>([]);
-const session = ref();
+const session = ref<GetSessionModel>();
 onBeforeMount(async () => {
   participantList.value = await api.sessions.GetSessionParticipants(
     props.sessionId as string

@@ -45,21 +45,29 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/sessions/list',
+        name: 'sessionsList',
         component: () => import('src/pages/coach/CoachSessions.vue'),
+        children: [
+          {
+            path: '/sessions/list/:sessionId',
+            name: 'check-session',
+            component: () => import('src/pages/coach/CheckSession.vue'),
+            props: true,
+          },
+          {
+            path: '/sessions/list/edit/:sessionId',
+            name: 'edit-session',
+            component: () => import('src/pages/coach/EditSession.vue'),
+            props: true,
+          },
+        ],
       },
-      {
-        path: '/sessions/list/:sessionId',
-        name: 'check-session',
-        component: () => import('src/pages/coach/CheckSession.vue'),
-        props: true,
-      },
-      {
-        path: '/sessions/list/edit/:sessionId',
-        name: 'edit-session',
-        component: () => import('src/pages/coach/EditSession.vue'),
-        props: true,
-      },
+
       //clients
+      {
+        path: '/mysessions',
+        component: () => import('src/pages/client/MySessions.vue'),
+      },
       {
         path: '/sessions/find',
         component: () => import('src/pages/client/FindSession.vue'),
@@ -72,6 +80,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/register',
         component: () => import('src/pages/auth/RegisterPage.vue'),
+      },
+
+      //Contact page
+      {
+        path: '/contact',
+        component: () => import('src/pages/contact/ContactForm.vue'),
       },
     ],
   },

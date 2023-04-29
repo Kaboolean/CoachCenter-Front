@@ -38,7 +38,6 @@
 <script setup lang="ts">
 import api from 'src/api';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 import { onBeforeMount, ref, computed } from 'vue';
 import { GetClientModel } from 'src/api/models/clients';
 import { GetCoachModel } from 'src/api/models/coaches';
@@ -75,8 +74,7 @@ function details() {
   displayDetails.value = !displayDetails.value;
 }
 
-const router = useRouter();
-function update() {
-  router.go(0);
+async function update() {
+  userModel.value = await api.users.getUserById(user.value.userId);
 }
 </script>

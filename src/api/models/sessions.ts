@@ -20,6 +20,7 @@ export interface GetSessionModel {
   duration: number;
   description: string;
   tags: string[];
+  participantCount: number;
   coachUserId: string;
   coachUserName: string;
   coachFirstName: string;

@@ -62,12 +62,24 @@
           v-bind="link"
         />
       </q-list>
+      <q-list class="q-mt-sm menu-navigation col-12">
+        <div class="col-12 q-ma-sm fixed-bottom">
+          <MenuLink
+            v-for="link in bottomMenuLinks"
+            :key="link.title"
+            :miniState="miniState"
+            v-bind="link"
+          />
+        </div>
+      </q-list>
     </q-drawer>
 
     <q-page-container>
-      <div class="q-pa-lg">
-        <router-view />
-      </div>
+      <q-page>
+        <div class="q-pa-lg">
+          <router-view />
+        </div>
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
@@ -117,6 +129,12 @@ const clientItems = [
     link: '/account',
   },
   {
+    title: 'My sessions',
+    name: 'SubscribedSessions',
+    icon: 'fitness_center',
+    link: '/mysessions',
+  },
+  {
     title: 'Find a session',
     name: 'Sessions',
     icon: 'fitness_center',
@@ -147,6 +165,15 @@ const coachItems = [
     name: 'CreateSession',
     icon: 'sports_score',
     link: '/sessions/list',
+  },
+];
+
+const bottomMenuLinks = [
+  {
+    title: 'Contact us',
+    name: 'Contact',
+    icon: 'mail',
+    link: '/contact',
   },
 ];
 

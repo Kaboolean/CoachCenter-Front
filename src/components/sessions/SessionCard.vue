@@ -37,9 +37,9 @@
 import { formatDate } from 'src/utils/dateUtils';
 import { defineProps } from 'vue';
 
-import { ListSessionModel } from 'src/api/models/sessions';
+import { GetSessionModel, ListSessionModel } from 'src/api/models/sessions';
 const props = defineProps<{
-  session: ListSessionModel;
+  session: ListSessionModel | GetSessionModel;
   message: string | null;
 }>();
 </script>

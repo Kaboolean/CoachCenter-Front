@@ -11,11 +11,11 @@
               v-model="innerValue.userName"
               lazy-rules
               :rules="[
+                () => !!innerValue.userName || 'Enter a username',
                 () =>
-                  (innerValue.userName &&
-                    innerValue.userName.length > 5 &&
-                    innerValue.userName.length < 25) ||
-                  'Enter a correct Username',
+                  (innerValue.userName.length >= 5 &&
+                    innerValue.userName.length <= 25) ||
+                  'Username must be 5-25 characters.',
               ]"
               hide-bottom-space
               dense
@@ -33,6 +33,9 @@
                 () =>
                   (innerValue.email && innerValue.email.includes('@')) ||
                   'Enter an email',
+                () =>
+                  innerValue.email.length <= 100 ||
+                  'Email can not be that long',
               ]"
               hide-bottom-space
               dense
@@ -49,11 +52,17 @@
               v-model="innerValue.firstName"
               lazy-rules
               :rules="[
-                () =>
-                  (innerValue.firstName &&
-                    innerValue.firstName.length > 3 &&
-                    innerValue.firstName.length < 15) ||
-                  'Enter a correct firstname',
+                () => {
+                  if(userType !== 'admin'){
+                    return !!innerValue.firstName ||
+                  'Enter a firstname.'
+                  }
+                },
+                () =>{if(userType !== 'admin'){
+                  return (
+                    innerValue.firstName!.length >= 3 &&
+                    innerValue.firstName!.length <= 25) ||
+                  'Firstname must be 3-25 characters long.'}},
               ]"
               hide-bottom-space
               dense
@@ -69,10 +78,12 @@
               lazy-rules
               :rules="[
                 () =>
-                  (innerValue.lastName &&
-                    innerValue.lastName.length > 1 &&
-                    innerValue.lastName.length < 15) ||
-                  'Enter a correct lastname',
+                  !!innerValue.lastName ||
+                  'Enter a lastname.',
+                () =>
+                  (innerValue.lastName!.length >= 3 &&
+                    innerValue.lastName!.length <= 25) ||
+                  'Lastname must be 3-25 characters long.',
               ]"
               hide-bottom-space
               dense
@@ -103,6 +114,8 @@ import api from 'src/api';
 import { GetUserModel } from 'src/api/models/users';
 import { defineEmits, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
+import { useStore } from 'vuex';
+
 const innerValue = ref<GetUserModel>({
   id: '',
   userName: '',
@@ -131,6 +144,9 @@ onMounted(() => {
   innerValue.value.birthDate = props.user.birthDate;
   innerValue.value.userType = props.user.userType;
 });
+
+const store = useStore();
+const userType = ref(store.getters['auth/getUser'].userType);
 
 const emit = defineEmits(['updateUser']);
 const $q = useQuasar();

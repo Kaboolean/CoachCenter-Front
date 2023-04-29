@@ -26,7 +26,6 @@ export default class SessionsResource {
     const result = await http.get<ListParticipantModel>(
       `${resource}/${id}/participants`
     );
-    console.log(result.data.data);
     return result.data.data;
   }
 
