@@ -1,10 +1,21 @@
 <template>
   <div>
     <q-card class="my-card">
-      <q-card-section class="bg-primary text-white">
-        <div class="text-h6">{{ session.name }}</div>
-        <div class="text-subtitle2">{{ formatDate(session.date) }}</div>
-      </q-card-section>
+      <div class="row">
+        <q-card-section
+          class="bg-primary text-white"
+          :class="mode ? 'col-md-8' : 'col-md-12'"
+        >
+          <div class="text-h6">{{ session.name }}</div>
+          <div class="text-subtitle2">{{ formatDate(session.date) }}</div>
+        </q-card-section>
+        <q-card-section
+          v-if="mode"
+          class="col-md-4 justify-center items-center"
+        >
+          <q-btn @click="action">{{ mode }}</q-btn>
+        </q-card-section>
+      </div>
 
       <q-separator />
 
@@ -35,11 +46,17 @@
 </template>
 <script setup lang="ts">
 import { formatDate } from 'src/utils/dateUtils';
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 import { GetSessionModel, ListSessionModel } from 'src/api/models/sessions';
 const props = defineProps<{
   session: ListSessionModel | GetSessionModel;
   message: string | null;
+  mode: string | null;
 }>();
+
+const emit = defineEmits(['action']);
+function action() {
+  emit('action');
+}
 </script>

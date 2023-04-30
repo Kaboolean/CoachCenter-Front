@@ -36,8 +36,12 @@ export default class SessionsResource {
     return result.data.data;
   }
 
+  public async GetClientSessions() {
+    const result = await http.get<ListSessionModel[]>(`${resource}/client`);
+    return result.data;
+  }
+
   public async JoinSession(sessionId: string) {
-    console.log(sessionId);
     await http.post(`${resource}/${sessionId}`);
   }
 
@@ -54,6 +58,14 @@ export default class SessionsResource {
   public async DeleteSession(id: string) {
     try {
       await http.delete(`${resource}/${id}`);
+    } catch (err: any) {
+      throw err;
+    }
+  }
+
+  public async DeleteSessionParticipant(id: string) {
+    try {
+      await http.delete(`${resource}/client/${id}`);
     } catch (err: any) {
       throw err;
     }

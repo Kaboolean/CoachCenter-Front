@@ -39,8 +39,6 @@ onBeforeMount(async () => {
     props.sessionId as string
   );
   session.value = await api.sessions.GetSessionById(props.sessionId as string);
-  console.log(participantList.value);
-  console.log(session.value);
 });
 
 const props = defineProps({
